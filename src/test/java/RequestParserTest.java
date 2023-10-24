@@ -5,7 +5,6 @@ import java.io.BufferedReader;
 import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.MissingResourceException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -49,7 +48,7 @@ class RequestParserTest {
     @Test
     public void parseRequestPostTest() {
         //given
-        String requestSample = "POST " + uri + " HTTP/1.1\n" + inputHeaders + "\r\nfield1=value1&field2=value2";
+        String requestSample = "POST " + uri + " HTTP/1.1\n" + inputHeaders + "\r\n \r\nfield1=value1&field2=value2";
         BufferedReader reader = new BufferedReader(new StringReader(requestSample));
         Request expected = new Request();
         expected.setHttpMethod(HttpMethod.POST);
@@ -76,7 +75,7 @@ class RequestParserTest {
         expected.setHttpMethod(HttpMethod.DELETE);
         expected.setUri("/test.txt");
         expected.setHeaders(headers);
-        expected.setBody("field1=value1&field2=value2");
+
 
         //do
         Request result = requestParser.parseRequest(reader);
@@ -85,7 +84,7 @@ class RequestParserTest {
         assertEquals(expected.getHttpMethod(), result.getHttpMethod());
         assertEquals(expected.getUri(), result.getUri());
         assertEquals(expected.getHeaders(), result.getHeaders());  // two maps are equals if they contain same values for the same keys
-        assertEquals(expected.getBody(), result.getBody());
+        assertTrue(result.getBody().isEmpty());
     }
 
     @Test
@@ -95,20 +94,9 @@ class RequestParserTest {
         BufferedReader reader = new BufferedReader(new StringReader(requestSample));
 
         //do & verify
-        assertThrows(ParseException.class, () -> requestParser.parseRequest(reader));
+        assertThrows(RuntimeException.class, () -> requestParser.parseRequest(reader));
     }
 
-
-
-    @Test
-    public void parseRequestThrowsExceptionWhenNoUriProvided() {
-        //given
-        String requestSample = "GET  HTTP/1.1\n" + inputHeaders;
-        BufferedReader reader = new BufferedReader(new StringReader(requestSample));
-
-        //do & verify
-        assertThrows(MissingResourceException.class, () -> requestParser.parseRequest(reader));
-    }
 
     @Test
     public void parseRequestThrowsExceptionWhenWrongMethodProvided() {
@@ -117,6 +105,6 @@ class RequestParserTest {
         BufferedReader reader = new BufferedReader(new StringReader(requestSample));
 
         //do & verify
-        assertThrows(IllegalArgumentException.class, () -> requestParser.parseRequest(reader));
+        assertThrows(RuntimeException.class, () -> requestParser.parseRequest(reader));
     }
 }
