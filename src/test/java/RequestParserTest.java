@@ -13,9 +13,10 @@ class RequestParserTest {
     private final RequestParser requestParser = new RequestParser();
     private static final Map<String, String> headers = new HashMap<>();
     private final String uri = "/test.txt";
-    private final String inputHeaders = "Host: uk.wikipedia.org\n" +
-            "User-Agent: firefox/5.0 (Linux; Debian 5.0.8; en-US; rv:1.8.1.7) Gecko/20070914 Firefox/2.0.0.7\n" +
-            "Connection: close";
+    private final String inputHeaders = """
+            Host: uk.wikipedia.org
+            User-Agent: firefox/5.0 (Linux; Debian 5.0.8; en-US; rv:1.8.1.7) Gecko/20070914 Firefox/2.0.0.7
+            Connection: close""";
 
 
     @BeforeAll
@@ -45,6 +46,7 @@ class RequestParserTest {
         assertTrue(result.getBody().isEmpty());
     }
 
+    //TODO: change headers to the one with content length
     @Test
     public void parseRequestPostTest() {
         //given
@@ -97,11 +99,10 @@ class RequestParserTest {
         assertThrows(RuntimeException.class, () -> requestParser.parseRequest(reader));
     }
 
-
     @Test
     public void parseRequestThrowsExceptionWhenWrongMethodProvided() {
         //given
-        String requestSample = "TEST " + uri + " HTTP/1.1\n" + inputHeaders;;
+        String requestSample = "TEST " + uri + " HTTP/1.1\n" + inputHeaders;
         BufferedReader reader = new BufferedReader(new StringReader(requestSample));
 
         //do & verify
