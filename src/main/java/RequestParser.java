@@ -33,12 +33,12 @@ public class RequestParser {
     private void injectHeaders(BufferedReader reader, Request request) {
         Map<String, String> headers = new HashMap<>();
         String currentLine;
-        String[] splitted;
+        String[] split;
         try {
             while ((currentLine = reader.readLine()) != null) {
                 if (currentLine.contains(":")) {
-                    splitted = currentLine.split(": ");
-                    headers.put(splitted[0], splitted[1]);
+                    split = currentLine.split(": ");
+                    headers.put(split[0], split[1]);
                 } else if (currentLine.equals("") || currentLine.equals(" ")) {
                     break;
                 } else {

@@ -1,24 +1,19 @@
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.Mockito.when;
 
 class ContentReaderTest {
-    private final String webAppPath = "/test";
+    private final String webAppPath = "src/test/resources";
     private final ContentReader contentReader = new ContentReader(webAppPath);
 
     @Test
     public void readContentTest() throws IOException {
         //given
         String uri = "index.html";
-        Response expected = new Response();
-        expected.setStatus(HttpStatus.OK);
         String expectedContent = "test string";
 
         //do
@@ -28,7 +23,7 @@ class ContentReaderTest {
         actualReader.close();
 
         //verify
-        assertEquals(expected.getStatus(), actual.getStatus());
+        assertEquals(HttpStatus.OK, actual.getStatus());
         assertEquals(expectedContent, actualContent);
     }
 
@@ -46,18 +41,17 @@ class ContentReaderTest {
     }
 
     @Test
-    public void exceptionWhileReadingContentTest() throws IOException {
+    public void contentIsNotAFileTest() {
         //given
-        String uri = "index.html";
-        BufferedReader bufferedReader = org.mockito.Mockito.mock(BufferedReader.class);
-        when(bufferedReader.readLine()).thenThrow(IOException.class);
+        String uri = "index";
 
         //do
         Response actual = contentReader.readContent(uri);
 
         //verify
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, actual.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, actual.getStatus());
         assertNull(actual.getContent());
     }
 
+    //TODO: create test for Internal Server Error case
 }
