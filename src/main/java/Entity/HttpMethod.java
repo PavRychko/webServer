@@ -1,3 +1,5 @@
+package Entity;
+
 public enum HttpMethod {
     GET,
     POST,

@@ -1,3 +1,7 @@
+import Entity.HttpMethod;
+import Entity.ParseException;
+import Entity.Request;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Arrays;

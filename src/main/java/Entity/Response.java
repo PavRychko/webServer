@@ -1,3 +1,6 @@
+package Entity;
+
+import Entity.HttpStatus;
 import lombok.Getter;
 
 
