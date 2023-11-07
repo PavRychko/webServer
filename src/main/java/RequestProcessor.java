@@ -10,8 +10,11 @@ public class RequestProcessor {
     private String webAppPath;
 
     public Response processRequest(Request request) {
+        if(request == null || request.getHttpMethod() == null || request.getUri() == null){
+            return createBadRequestResponse();
+        }
         File file = new File(webAppPath + "/" + request.getUri());
-      return switch (request.getHttpMethod()) {
+        return switch (request.getHttpMethod()) {
             case GET -> readContent(file);
             case POST -> updateContent(file, request.getBody());
             case DELETE -> deleteContent(file);
@@ -37,12 +40,12 @@ public class RequestProcessor {
 
     //TODO: write update and delete properly
     private Response updateContent(File file, String body) {
-        try  {
-        if (!file.exists()) {
-            file.createNewFile();
-        }
-        FileWriter writer = new FileWriter(file);
-        writer.write(body);
+        try {
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileWriter writer = new FileWriter(file);
+            writer.write(body);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -68,7 +71,7 @@ public class RequestProcessor {
     }
 
     private Response createOkResponse(Reader reader) {
-         return new Response(HttpStatus.OK, reader);
+        return new Response(HttpStatus.OK, reader);
     }
 
 }

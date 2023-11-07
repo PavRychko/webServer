@@ -37,7 +37,7 @@ class RequestProcessorTest {
     @Test
     public void processGetRequestWithWrongUriTest() {
         //given
-        String uri ="test";
+        String uri = "test";
         Request request = new Request();
         request.setUri(uri);
         request.setHttpMethod(HttpMethod.GET);
@@ -66,8 +66,33 @@ class RequestProcessorTest {
         assertNull(actual.getContent());
     }
 
-    //TODO: create tests for POST and DELETE, and also for Internal Server Error case
+    @Test
+    public void nullRequestTest() {
+        //given
+        Request request = null;
 
+        //do
+        Response actual = requestProcessor.processRequest(request);
+
+        //verify
+        assertEquals(HttpStatus.BAD_REQUEST, actual.getStatus());
+        assertNull(actual.getContent());
+    }
+
+    @Test
+    public void nullStatusTest() {
+        //given
+        Request request = new Request();
+
+        //do
+        Response actual = requestProcessor.processRequest(request);
+
+        //verify
+        assertEquals(HttpStatus.BAD_REQUEST, actual.getStatus());
+        assertNull(actual.getContent());
+    }
+
+    //TODO: create tests for POST and DELETE, and also for Internal Server Error case
 
 
 
