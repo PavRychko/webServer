@@ -3,8 +3,6 @@ import Entity.ParseException;
 import Entity.Request;
 
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +13,6 @@ public class RequestParser {
         Request request = new Request();
         injectUriAndMethod(reader, request);
         injectHeaders(reader, request);
-        injectBody(reader, request);
         return request;
     }
 
@@ -26,7 +23,7 @@ public class RequestParser {
             if (split.length != 3) {
                 throw new ParseException("request`s first line is not equals to 3 arguments: " + firstLine);
             }
-            HttpMethod method = Arrays.stream(HttpMethod.values()).filter(m -> m.toString().equalsIgnoreCase(split[0])).findFirst().orElseThrow(IllegalArgumentException::new);
+            HttpMethod method = HttpMethod.getHttpMethod(split[0]);
             request.setHttpMethod(method);
             request.setUri(split[1]);
         } catch (Exception e) {
@@ -56,22 +53,5 @@ public class RequestParser {
         request.setHeaders(headers);
     }
 
-
-    private void injectBody(BufferedReader reader, Request request) {
-        try {
-            if (reader.ready()) {
-                StringBuilder buffer = new StringBuilder();
-                String currentLine;
-                while ((currentLine = reader.readLine()) != null) {
-                    buffer.append(currentLine);
-                }
-                request.setBody(buffer.toString());
-            } else {
-                request.setBody("");
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }
 

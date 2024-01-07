@@ -1,18 +1,24 @@
 import Entity.Response;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
+
 
 public class ResponseWriter {
-    private final String httpVersion = "HTTP/1.1";
+    private static final String httpVersion = "HTTP/1.1";
 
-    public void writeResponse(Writer writer, Response response) throws IOException {
-        String responseHeaders = httpVersion + " " + response.getStatus().toString();
-        writer.write(responseHeaders);
-        Reader reader = response.getContent();
-        if(reader != null) {
-            reader.transferTo(writer);
+    public void writeResponse(BufferedWriter writer, Response response) throws IOException {
+        String statusLine = httpVersion + " " + response.getStatus().toString();
+        writer.write(statusLine);
+        BufferedReader reader = response.getContent();
+        if (reader != null) {
+            writer.newLine();
+            writer.newLine();
+            String currentLine;
+            while ((currentLine = reader.readLine()) != null) {
+                writer.write(currentLine);
+            }
         }
 
     }

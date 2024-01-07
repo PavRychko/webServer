@@ -45,50 +45,6 @@ class RequestParserTest {
         assertEquals(expected.getHttpMethod(), result.getHttpMethod());
         assertEquals(expected.getUri(), result.getUri());
         assertEquals(expected.getHeaders(), result.getHeaders());  // two maps are equals if they contain same values for the same keys
-        assertTrue(result.getBody().isEmpty());
-    }
-
-    //TODO: change headers to the one with content length
-    @Test
-    public void parseRequestPostTest() {
-        //given
-        String requestSample = "POST " + uri + " HTTP/1.1\n" + inputHeaders + "\r\n \r\nfield1=value1&field2=value2";
-        BufferedReader reader = new BufferedReader(new StringReader(requestSample));
-        Request expected = new Request();
-        expected.setHttpMethod(HttpMethod.POST);
-        expected.setUri(uri);
-        expected.setHeaders(headers);
-        expected.setBody("field1=value1&field2=value2");
-
-        //do
-        Request result = requestParser.parseRequest(reader);
-
-        //verify
-        assertEquals(expected.getHttpMethod(), result.getHttpMethod());
-        assertEquals(expected.getUri(), result.getUri());
-        assertEquals(expected.getHeaders(), result.getHeaders());  // two maps are equals if they contain same values for the same keys
-        assertEquals(expected.getBody(), result.getBody());
-    }
-
-    @Test
-    public void parseRequestDeleteTest() {
-        //given
-        String requestSample = "DELETE " + uri + " HTTP/1.1\n" + inputHeaders;
-        BufferedReader reader = new BufferedReader(new StringReader(requestSample));
-        Request expected = new Request();
-        expected.setHttpMethod(HttpMethod.DELETE);
-        expected.setUri("/test.txt");
-        expected.setHeaders(headers);
-
-
-        //do
-        Request result = requestParser.parseRequest(reader);
-
-        //verify
-        assertEquals(expected.getHttpMethod(), result.getHttpMethod());
-        assertEquals(expected.getUri(), result.getUri());
-        assertEquals(expected.getHeaders(), result.getHeaders());  // two maps are equals if they contain same values for the same keys
-        assertTrue(result.getBody().isEmpty());
     }
 
     @Test

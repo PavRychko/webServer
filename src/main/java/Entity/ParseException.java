@@ -1,6 +1,7 @@
 package Entity;
 
-public class ParseException extends RuntimeException{
+public class ParseException extends RuntimeException {
     public ParseException(String s) {
+        super(s);
     }
 }
