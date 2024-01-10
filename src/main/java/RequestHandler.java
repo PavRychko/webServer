@@ -36,11 +36,11 @@ public class RequestHandler {
         log.info("end of response");
     }
 
-    private Response processRequest(Request request) {
+    public Response processRequest(Request request) {
         if (request == null || request.getHttpMethod() == null || request.getUri() == null) {
             return createBadRequestResponse();
         } else if (request.getHttpMethod() != HttpMethod.GET) {
-            return createBadRequestResponse();
+            return createMethodNotAllowedResponse();
         }
         return readContent(request.getUri());
     }

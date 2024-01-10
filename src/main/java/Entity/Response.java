@@ -32,6 +32,10 @@ public class Response {
         return new Response(HttpStatus.BAD_REQUEST);
     }
 
+    public static Response createMethodNotAllowedResponse() {
+        return new Response(HttpStatus.METHOD_NOT_ALLOWED);
+    }
+
     public static Response createOkResponse(BufferedReader reader) {
         return new Response(HttpStatus.OK, reader);
     }
